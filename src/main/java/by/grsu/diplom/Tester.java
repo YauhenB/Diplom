@@ -14,19 +14,29 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.ImagePreProcessingScaler;
+import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Created by yauhen on 30.12.16.
  */
 public class Tester {
-//    protected static final Logger log = LoggerFactory.getLogger(Tester.class);
+    protected static final String chr = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    protected static final HashMap<Integer, Character> outMap = new HashMap<>();
+
+    //    protected static final Logger log = LoggerFactory.getLogger(Tester.class);
+    static { //populate map
+        for (int index = 0; index < 62; index++) {
+            outMap.put(index, chr.charAt(index));
+        }
+    }
 
     public static void testNet(String path, MultiLayerNetwork network, long seed, int height, int width,
                                int channels, int batchSize, int numLabels) throws IOException {
@@ -55,15 +65,17 @@ public class Tester {
 
     }
 
-    public static void predict(String filePath, MultiLayerNetwork network,int height,int width,int channels) throws IOException {
+    public static void predict(String filePath, MultiLayerNetwork network, int height, int width, int channels) throws IOException {
         File file = new File(filePath);
-        ImageLoader loader = new ImageLoader(height,width,channels);
+        ImageLoader loader = new ImageLoader(height, width, channels);
         DataNormalization scaler = new ImagePreProcessingScaler(0, 1);
         INDArray array = loader.asRowVector(file);
         scaler.transform(array);
+        Integer predictedVal;
 
-        int[] predict = network.predict(array);
-        System.out.println((Arrays.toString(predict)));
+        predictedVal = network.predict(array)[0];
+
+        System.out.println(outMap.get(predictedVal));
 //        log.info(network.output(array).toString());
 
     }

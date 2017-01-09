@@ -12,10 +12,13 @@ import org.deeplearning4j.nn.conf.layers.SubsamplingLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  * Created by yauhen on 30.12.16.
@@ -82,9 +85,12 @@ public class Builder {
 
         try {
             network = ModelSerializer.restoreMultiLayerNetwork(path);
+
+
         } catch (IOException e) {
             System.err.println("WRONG FILENAME");
         }
+        System.out.println("NETWORK READY");
         return  network;
     }
 }

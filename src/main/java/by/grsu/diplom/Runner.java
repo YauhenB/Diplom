@@ -5,6 +5,8 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.slf4j.LoggerFactory;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -20,14 +22,17 @@ public class Runner {
     protected static Random rng = new Random(seed);
     protected static int listenerFreq = 1;
     protected static int iterations = 1;
-    protected static int epochs = 20; //50
+    protected static int epochs = 30; //50
     protected static int nCores = 15;
     protected static boolean save = true;
 
 
+
     public static void main(String[] args) throws Exception {
+
+
         MultiLayerNetwork network = Builder.getCustomModel(seed, iterations, numLabels, height, width, channels);
-        network = Builder.loadNetwork("./CHARNET", network);
+        network = Builder.loadNetwork("./CHARNET_labeled", network);
         switch (args[0]) {
             case ("recog"): {
                 Tester.predict(args[1], network, 50, 50, 1);
@@ -43,14 +48,12 @@ public class Runner {
             }
         }
 
-        //testing
-//        Tester.testNet("/home/yauhen/Downloads/Img/test",network,seed,height,width,channels,batchSize,62);
-
-//     Tester.predict("/home/yauhen/Downloads/Img/GoodImg/Bmp/L/img022-00061.png",network,50,50,1);
-
+//        testing
+//        Tester.testNet("/home/yauhen/Downloads/Img/BadImag/Bmp",network,seed,height,width,channels,batchSize,62);
+//            Tester.predict("/home/yauhen/Downloads/Img/Images/Bmp/a/img037-00020.png", network, 50, 50, 1);
 //        Trainer trainer=new Trainer();
-//        trainer.trainNet("/home/yauhen/Downloads/Img/GoodImg/Bmp",seed,network,height,
-//                width,channels,batchSize,numLabels,epochs,nCores,save,"CHARNET");
+//        trainer.trainNet("/home/yauhen/Downloads/Img/Images/Bmp",seed,network,height,
+//                width,channels,batchSize,numLabels,epochs,nCores,false,"CHARNET_labeled");
     }
 
 
